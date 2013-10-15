@@ -1,0 +1,68 @@
+<div id="main_body">
+<h4><%=t('RFQ Info') %></h4>
+
+<p>
+  <b><%= t('Customer') %></b>
+  <%= @customer.name %>
+</p>
+<p>
+  <b><%= t('RFQ Date') %></b>
+  <%= @rfq.created_at.strftime("%Y/%m/%d") %>
+</p>
+<p>
+  <b><%= t('Product Name') %></b>
+  <%= @rfq.product_name %>
+</p>
+<p>
+  <b><%= t('Drawing#') %></b>
+  <%= @rfq.drawing_num %>
+</p>
+<p>
+  <b><%= t('Material Requirement') %></b>
+  <%= @rfq.material_requirement %>
+</p>
+<p>
+  <b><%= t('Qty For Quote')  %></b>
+  <%= @rfq.qty_for_quote %>
+</p>
+<p>
+  <b><%= t('Dimension Unit')  %></b>
+  <%= @rfq.dimension_unit %>
+</p>
+
+<p>
+  <b><%= t('Tech Spec') %></b>
+  <%= @rfq.tech_spec %>
+</p>
+<p>
+  <b><%= t('Tech Note') %></b>
+  <%= @rfq.tech_note %>
+</p>
+<p>
+  <b><%= t('Est Production Date') %></b>
+  <%= @rfq.est_production_date.strftime("%Y/%m/%d") if @rfq.est_production_date.present? %>
+</p>
+<p>
+  <b><%= t('Void') %></b>
+  <%= @rfq.void ? t('Yes') : t('No') %>
+</p>
+<p>
+  <b><%= t('Sales') %></b>
+  <%= @rfq.sales.name %>
+</p>
+<p>
+  <b><%= t('Last Updated By') %></b>
+  <%= @rfq.last_updated_by.name %>
+</p>
+<p>
+  <b>LOG：</b>
+  <% Commonx::Log.where('resource_id = ? AND resource_name = ?', @rfq.id, params[:controller].sub('/', '_')).order("created_at DESC").each do |t| %>
+    <li><%= t.created_at.strftime("%Y/%m/%d") %>,&nbsp; <%= t.last_updated_by.name %>,&nbsp; <%= t.log %> </li>
+  <% end %>
+</p>
+
+  <%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :id => 'close', :class => BUTTONS_CLS['action'] %>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<%= link_to t('New Log'), SUBURI + commonx.new_log_path(:resource_id => @rfq.id, :resource_name => params[:controller], :subaction => 'rfq', :format => :js), :remote => true, 
+                          :id => 'new_log_link', :class => BUTTONS_CLS['action'] if has_action_right?('create_rfq', 'commonx/logs') %>    	
+</div>
