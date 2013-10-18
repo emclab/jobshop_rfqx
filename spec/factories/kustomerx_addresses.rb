@@ -1,7 +1,7 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
 FactoryGirl.define do
-  factory :address, :class => 'Customerx::Address' do
+  factory :kustomerx_address, :class => 'Kustomerx::Address' do
     province "my prov"
     city_county_district "city county"
     add_line "123 road"

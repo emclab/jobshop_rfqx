@@ -2,6 +2,7 @@
 class CreateJobshopQuotexQuotes < ActiveRecord::Migration
   def change
     create_table :jobshop_quotex_quotes do |t|
+      t.integer :rfq_id
       t.integer :quote_task_id
       t.integer :mfg_process_id
       t.string :wfid
@@ -37,5 +38,6 @@ class CreateJobshopQuotexQuotes < ActiveRecord::Migration
     add_index :jobshop_quotex_quotes, :quote_task_id
     add_index :jobshop_quotex_quotes, :void
     add_index :jobshop_quotex_quotes, :wfid
+    add_index :jobshop_quotex_quotes, :rfq_id
   end
 end

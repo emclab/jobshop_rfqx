@@ -63,8 +63,8 @@ module JobshopRfqx
     
     protected
     def load_customer
-      @customer = Customerx::Customer.find_by_id(params[:customer_id]) if params[:customer_id].present?
-      @customer = Customerx::Customer.find_by_id(JobshopRfqx::Rfq.find_by_id(params[:id]).customer_id) if params[:id].present?
+      @customer = JobshopRfqx.customer_class.find_by_id(params[:customer_id]) if params[:customer_id].present?
+      @customer = JobshopRfqx.customer_class.find_by_id(JobshopRfqx::Rfq.find_by_id(params[:id]).customer_id) if params[:id].present?
     end
   end
 end

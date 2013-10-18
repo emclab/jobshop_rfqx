@@ -1,1 +1,1 @@
-JobshopRfqx.customer_class = 'Customerx::Customer'
+JobshopRfqx.customer_class = 'Kustomerx::Customer'

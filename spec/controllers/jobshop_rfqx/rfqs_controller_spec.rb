@@ -18,7 +18,7 @@ module JobshopRfqx
       ul = FactoryGirl.build(:user_level, :sys_user_group_id => ug.id)
       @u = FactoryGirl.create(:user, :user_levels => [ul], :user_roles => [ur])
       
-      @cust = FactoryGirl.create(:customer) 
+      @cust = FactoryGirl.create(:kustomerx_customer) 
       @q_task1 = FactoryGirl.create(:event_taskx_event_task, :name => 'quote && quote') 
     end
     

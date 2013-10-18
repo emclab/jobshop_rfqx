@@ -1,7 +1,7 @@
-# This migration comes from customerx (originally 20130207203748)
-class CreateCustomerxContacts < ActiveRecord::Migration
+# This migration comes from kustomerx (originally 20131013212912)
+class CreateKustomerxContacts < ActiveRecord::Migration
   def change
-    create_table :customerx_contacts do |t|
+    create_table :kustomerx_contacts do |t|
       t.integer :customer_id
       t.string :name
       t.string :position
@@ -12,5 +12,7 @@ class CreateCustomerxContacts < ActiveRecord::Migration
 
       t.timestamps
     end
+    
+    add_index :kustomerx_contacts, :customer_id
   end
 end

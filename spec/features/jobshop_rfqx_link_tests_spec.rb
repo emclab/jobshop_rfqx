@@ -42,7 +42,7 @@ describe "LinkTests" do
       user_access = FactoryGirl.create(:user_access, :action => 'create_rfq', :resource => 'commonx_logs', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")
         
-      @cust = FactoryGirl.create(:customer) 
+      @cust = FactoryGirl.create(:kustomerx_customer) 
       
             
       visit '/'
