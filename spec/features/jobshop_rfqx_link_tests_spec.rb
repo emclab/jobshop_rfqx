@@ -41,6 +41,8 @@ describe "LinkTests" do
         :sql_code => "record.sales_id == session[:user_id]")
       user_access = FactoryGirl.create(:user_access, :action => 'create_rfq', :resource => 'commonx_logs', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")
+      ua1 = FactoryGirl.create(:user_access, :action => 'index', :resource => 'jobshop_quotex_quotes', :role_definition_id => @role.id, :rank => 1,
+           :sql_code => "JobshopQuotex::Quote.where(:void => false).order('created_at DESC')")
         
       @cust = FactoryGirl.create(:kustomerx_customer) 
       
@@ -60,6 +62,10 @@ describe "LinkTests" do
       page.should have_content('RFQs')
       click_link('Edit')
       page.should have_content('Edit RFQ')
+      visit rfqs_path
+      save_and_open_page
+      click_link('Quotes')
+      save_and_open_page
     end
   end
 end

@@ -1,3 +1,7 @@
+<% if false %>
+  <%= render inline: ERB.new(@erb_code).result(binding) %>
+  
+<% else %>
 <%= simple_form_for @rfq do |f| %>    
 
   <%#= f.input :customer_name_autocomplete, :input_html => { data: {autocomplete_source: autocomplete_customers_path}}, :placeholder => "输入关键字", :label => t("Customer") %>  
@@ -14,5 +18,8 @@
   <%= f.input :sales_id, :collection => Authentify::UsersHelper::return_users('sales', params[:controller]), :label => t("Sales"),:label_method => :name, :value_method => :id, :include_blank => true if !readonly?(@rfq, 'sales_id')%>
   <%= f.input :sales_noupdate, :input_html => {:value => @rfq.sales.name}, :label => t("Sales"),:readonly => true if readonly?(@rfq, 'sales_id')%>
   
+  <%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :class => BUTTONS_CLS['action'] %>
   <%= f.button :submit, t('Save') %>  
+<% end %>
+
 <% end %>

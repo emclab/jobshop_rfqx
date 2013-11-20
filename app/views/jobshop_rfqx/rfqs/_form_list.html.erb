@@ -1,3 +1,7 @@
+<% if false %>
+  <%= render inline: ERB.new(@erb_code).result(binding) %>
+  
+<% else %>
 <div class="pagination"><%= will_paginate models %></div>
     <table class="table table-striped">
 		<tr>
@@ -29,16 +33,16 @@
 			<td><%= prt(r, :product_name) %></td>
 			<td><%= prt(r, :drawing_num) %></td>
 			<td><%= prt(r, :qty_for_quote) %></td> 
-			<% quotes = JobshopQuotex::Quote.joins('JOIN event_taskx_event_tasks ON jobshop_quotex_quotes.quote_task_id = event_taskx_event_tasks.id').where('event_taskx_event_tasks.resource_id = ? AND event_taskx_event_tasks.resource_string = ?', r.id, params[:controller]) %>
+			<% quotes = JobshopQuotex::Quote.where(:rfq_id => r.id, :void => false) %>
 			<td><%= quotes.present? ? t('Yes') : t('No') %></td>
 			<td><%= quotes.last.created_at.strftime("%Y/%m/%d") if quotes.present? %></td>
 			<td><%=  %></td>
 			<td><%= t(prt(r, :void).to_s) %></td>
 			<td><%= prt(r, 'last_updated_by.name') %></td>    
 			<td><%= link_to t('Edit'), SUBURI + "/authentify/view_handler?index=1&url=#{edit_rfq_path(r)}", :class => BUTTONS_CLS['action']  if has_action_right?('update', params[:controller], r) %></td>
-			<td><%= link_to t('Quote Requests'), SUBURI + "/authentify/view_handler?index=1&url=#{SUBURI + CGI::escape(event_taskx.event_tasks_path(:resource_id => r.id, :resource_string => params[:controller], :subaction => 'rfq_quote'))}", :class => BUTTONS_CLS['action']  if has_action_right?('index_rfq_quote', 'event_taskx/event_tasks', r) %></td>
-			<td><%#= link_to t('Orders'), SUBURI + "/authentify/view_handler?index=1&url=#{}", :class => BUTTONS_CLS['action']  if has_action_right?('index_rfq_quote', '', r) %></td>
-			<td><%#= link_to t('Quality Issues'), SUBURI + "/authentify/view_handler?index=1&url=#{}", :class => BUTTONS_CLS['action']  if has_action_right?('index', '', r) %></td>
+			<td><%#= link_to t('Orders'), SUBURI + "/authentify/view_handler?index=1&url=#{SUBURI + CGI::escape eval(JobshopRfqx.order_index_path.to_s)}", :class => BUTTONS_CLS['action']  if has_action_right?('index_rfq_quote', 'event_taskx/event_tasks', r) %></td>
+			<td><%= link_to t('Quotes'), SUBURI + "/authentify/view_handler?index=1&url=#{SUBURI + CGI::escape(eval(JobshopRfqx.quote_index_path.to_s))}", :class => BUTTONS_CLS['action']   %> </td>
+			<td><%= link_to t('Mfg Processes'), SUBURI + "/authentify/view_handler?index=1&url=#{SUBURI + CGI::escape(eval(JobshopRfqx.mfg_process_index_path.to_s))}", :class => BUTTONS_CLS['action']   %> </td>
 		  </tr>
 		<% end %>
 	</table>
@@ -48,9 +52,10 @@
 	    <th>
 	    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	    	<%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :class => BUTTONS_CLS['action']  %>
-	    	<%= link_to t('New RFQ'), SUBURI + "/authentify/view_handler?index=1&url=#{new_rfq_path(:customer_id => @customer.id, :parent_record_id => @customer.id, :parent_resource => 'customerx/customers')}", :class => BUTTONS_CLS['action']  if @customer && has_action_right?('create', params[:controller], @customer) %>
-	    	<%= link_to t('Copy Last RFQ'), SUBURI + "/authentify/view_handler?index=1&url=#{copy_last_rfqs_path(:customer_id => @customer.id, :parent_record_id => @customer.id, :parent_resource => 'customerx/customers')}", :class => BUTTONS_CLS['action']  if models.present? && @customer && has_action_right?('create', params[:controller], @customer) %>
+	    	<%= link_to t('New RFQ'), SUBURI + "/authentify/view_handler?index=1&url=#{CGI::escape new_rfq_path(:customer_id => @customer.id, :parent_record_id => @customer.id, :parent_resource => JobshopRfqx.customer_class.to_s.underscore.pluralize)}", :class => BUTTONS_CLS['action']  if @customer && has_action_right?('create', params[:controller], @customer) %>
+	    	<%= link_to t('Copy Last RFQ'), SUBURI + "/authentify/view_handler?index=1&url=#{CGI::escape copy_last_rfqs_path(:customer_id => @customer.id, :parent_record_id => @customer.id, :parent_resource => 'customerx/customers')}", :class => BUTTONS_CLS['action']  if models.present? && @customer && has_action_right?('create', params[:controller], @customer) %>
 	    </th>
 	  </tr>
 	</table>
-	
+
+<% end %>	
