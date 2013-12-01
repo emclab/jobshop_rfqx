@@ -11,9 +11,9 @@
 			<th><%= t('Product Name') %></th>
 			<th><%= t('Drawing#') %></th>
 			<th><%= t('Qty For Quote') %></th>	
-			<th><%= t('Quoted?') %></th>
+			<th><%= t('Num of Quote') %></th>
 			<th><%= t('Last Quote Date') %></th>		
-			<th><%= t('Ordered?') %></th>
+			<th><%= t('Num of Order') %></th>
 			<th><%= t('Void') %></th>
 			<th><%= t('Last Updated By') %></th>
 			<th></th>
@@ -33,14 +33,14 @@
 			<td><%= prt(r, :product_name) %></td>
 			<td><%= prt(r, :drawing_num) %></td>
 			<td><%= prt(r, :qty_for_quote) %></td> 
-			<% quotes = JobshopQuotex::Quote.where(:rfq_id => r.id, :void => false) %>
-			<td><%= quotes.present? ? t('Yes') : t('No') %></td>
+			<% quotes = JobshopQuotex::Quote.where(:rfq_id => r.id, :void => false).order('created_at') %>
+			<td><%= quotes.size %></td>
 			<td><%= quotes.last.created_at.strftime("%Y/%m/%d") if quotes.present? %></td>
-			<td><%=  %></td>
+			<td><%= JobshopRfqx.order_index_path.size %></td>
 			<td><%= t(prt(r, :void).to_s) %></td>
 			<td><%= prt(r, 'last_updated_by.name') %></td>    
 			<td><%= link_to t('Edit'), SUBURI + "/authentify/view_handler?index=1&url=#{edit_rfq_path(r)}", :class => BUTTONS_CLS['action']  if has_action_right?('update', params[:controller], r) %></td>
-			<td><%#= link_to t('Orders'), SUBURI + "/authentify/view_handler?index=1&url=#{SUBURI + CGI::escape eval(JobshopRfqx.order_index_path.to_s)}", :class => BUTTONS_CLS['action']  if has_action_right?('index_rfq_quote', 'event_taskx/event_tasks', r) %></td>
+			<td><%= link_to t('Orders'), SUBURI + "/authentify/view_handler?index=1&url=#{SUBURI + CGI::escape(eval(JobshopRfqx.order_index_path.to_s))}", :class => BUTTONS_CLS['action']   %></td>
 			<td><%= link_to t('Quotes'), SUBURI + "/authentify/view_handler?index=1&url=#{SUBURI + CGI::escape(eval(JobshopRfqx.quote_index_path.to_s))}", :class => BUTTONS_CLS['action']   %> </td>
 			<td><%= link_to t('Mfg Processes'), SUBURI + "/authentify/view_handler?index=1&url=#{SUBURI + CGI::escape(eval(JobshopRfqx.mfg_process_index_path.to_s))}", :class => BUTTONS_CLS['action']   %> </td>
 		  </tr>

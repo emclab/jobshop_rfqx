@@ -87,6 +87,20 @@ PATH
       will_paginate
 
 PATH
+  remote: ../mfg_orderx
+  specs:
+    mfg_orderx (3.2.12.01)
+      coffee-rails (~> 3.2.1)
+      database_cleaner
+      execjs
+      jquery-rails
+      rails (= 3.2.12)
+      sass-rails (~> 3.2.3)
+      simple_form
+      uglifier
+      will_paginate
+
+PATH
   remote: ../mfg_processx
   specs:
     mfg_processx (3.2.12.01)
@@ -255,6 +269,7 @@ DEPENDENCIES
   jquery-rails (~> 2.3.0)
   kustomerx!
   launchy
+  mfg_orderx!
   mfg_processx!
   rspec-rails (>= 2.0.0)
   sqlite3

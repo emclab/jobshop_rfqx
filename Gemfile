@@ -15,6 +15,7 @@ gem 'event_taskx', :path => '../event_taskx'
 gem 'jobshop_quotex', :path => '../jobshop_quotex'
 gem 'kustomerx', :path => '../kustomerx'
 gem 'mfg_processx', :path => '../mfg_processx'
+gem 'mfg_orderx', :path => '../mfg_orderx'
 #gem 'mfg_orderx', :path => '../mfg_orderx'
 
 # Declare any dependencies that are still in development here instead of in
