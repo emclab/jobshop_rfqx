@@ -6,6 +6,7 @@
 
   <%#= f.input :customer_name_autocomplete, :input_html => { data: {autocomplete_source: autocomplete_customers_path}}, :placeholder => "输入关键字", :label => t("Customer") %>
   <%= f.input :customer_name, :label => t('Customer'), :readonly => true, :input_html => {:value => @customer.name} %>
+  <%= f.input :customer_id, :as => :hidden, :input_html => {:value => @customer.id} %>
   <%= f.input :product_name, :label => t("Product Name")  %>  
   <%= f.input :drawing_num, :label => t("Drawing#") %> 
   <%= f.input :dimension_unit, :label => t("Dimension Unit"), :collection => @dim_unit %> 

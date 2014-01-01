@@ -26,6 +26,8 @@ module JobshopRfqx
       if @rfq.save
         redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Saved!")
       else
+        @dim_unit = [t('Metric'),t('Inch')]
+        @customer = JobshopRfqx.customer_class.find_by_id(params[:rfq][:customer_id]) if params[:rfq].present? && params[:rfq][:customer_id].present?
         flash[:notice] = t('Data Error. Not Saved!')
         render 'new'
       end
