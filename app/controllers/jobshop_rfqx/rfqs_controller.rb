@@ -10,14 +10,14 @@ module JobshopRfqx
       @rfqs = params[:jobshop_rfqx_rfqs][:model_ar_r]  #returned by check_access_right
       @rfqs = @rfqs.where(:customer_id => @customer.id) if @customer
       @rfqs = @rfqs.page(params[:page]).per_page(@max_pagination) 
-      @erb_code = find_config_const('rfq_index_view', 'jobshop_rfqx_rfqs')
+      @erb_code = find_config_const('rfq_index_view', 'jobshop_rfqx')
     end
   
     def new
       @title = t('New RFQ')
       @rfq = JobshopRfqx::Rfq.new()
       @dim_unit = [t('Metric'),t('Inch')]
-      @erb_code = find_config_const('rfq_new_view', 'jobshop_rfqx_rfqs')
+      @erb_code = find_config_const('rfq_new_view', 'jobshop_rfqx')
     end
   
     def create
@@ -37,7 +37,7 @@ module JobshopRfqx
       @title = t('Update RFQ')
       @rfq = JobshopRfqx::Rfq.find_by_id(params[:id])
       @dim_unit = [t('Metric'),t('Inch')]
-      @erb_code = find_config_const('rfq_edit_view', 'jobshop_rfqx_rfqs')
+      @erb_code = find_config_const('rfq_edit_view', 'jobshop_rfqx')
     end
   
     def update
@@ -54,13 +54,13 @@ module JobshopRfqx
     def show
       @title = t('RFQ Info')
       @rfq = JobshopRfqx::Rfq.find_by_id(params[:id])
-      @erb_code = find_config_const('rfq_show_view', 'jobshop_rfqx_rfqs')
+      @erb_code = find_config_const('rfq_show_view', 'jobshop_rfqx')
     end
   
     def copy_last
       @title = t('New RFQ')
       @rfq = JobshopRfqx::Rfq.find_by_id(JobshopRfqx::Rfq.where(:customer_id => @customer.id, :void => false).last.id)
-      @erb_code = find_config_const('rfq_copy_last_view', 'jobshop_rfqx_rfqs')
+      @erb_code = find_config_const('rfq_copy_last_view', 'jobshop_rfqx')
     end
     
     protected

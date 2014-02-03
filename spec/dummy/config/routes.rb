@@ -11,6 +11,8 @@ Rails.application.routes.draw do
   mount MfgProcessx::Engine => '/mfg_processx'
   mount MfgOrderx::Engine => '/mfg_orderx'
   mount Searchx::Engine => '/searchx'
+  mount StateMachineLogx::Engine => '/sm_log'
+  mount BizWorkflowx::Engine => '/biz_wf'
   
   resource :session
   
