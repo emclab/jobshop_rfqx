@@ -34,12 +34,7 @@ module JobshopRfqx
       c = FactoryGirl.build(:jobshop_rfqx_rfq, :product_name => nil)
       c.should_not be_valid
     end
-    
-    it "should reject nil qty_for_quote" do
-      c = FactoryGirl.build(:jobshop_rfqx_rfq, :qty_for_quote => nil)
-      c.should_not be_valid
-    end
-    
+
     it "should reject nil dimension_unit" do
       c = FactoryGirl.build(:jobshop_rfqx_rfq, :dimension_unit => nil)
       c.should_not be_valid

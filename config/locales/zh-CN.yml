@@ -58,3 +58,8 @@ zh-CN:
   Orders : '订单'
   Quotes : '报价'
   Mfg Processes : '生产工艺'
+  'qty > 0' : '数量 > 0'
+  Qty : '数量'
+  Quote Qty : '报价数量'
+  Add Quote Qty : '填报价数量'
+  

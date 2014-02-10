@@ -32,7 +32,7 @@
 		  	<td><%= prt(r, 'customer.short_name') %></td>
 			<td><%= prt(r, :product_name) %></td>
 			<td><%= prt(r, :drawing_num) %></td>
-			<td><%= prt(r, :qty_for_quote) %></td> 
+			<td><%= return_qty_for_quote(r) %></td> 
 			<% quotes = JobshopQuotex::Quote.where(:rfq_id => r.id, :void => false).order('created_at') %>
 			<td><%= quotes.size %></td>
 			<td><%= quotes.last.created_at.strftime("%Y/%m/%d") if quotes.present? %></td>
@@ -53,7 +53,8 @@
 	    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 	    	<%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :class => BUTTONS_CLS['action']  %>
 	    	<%= link_to t('New RFQ'), SUBURI + "/authentify/view_handler?index=1&url=#{CGI::escape new_rfq_path(:customer_id => @customer.id, :parent_record_id => @customer.id, :parent_resource => JobshopRfqx.customer_class.to_s.underscore.pluralize)}", :class => BUTTONS_CLS['action']  if @customer && has_action_right?('create', params[:controller], @customer) %>
-	    	<%= link_to t('Copy Last RFQ'), SUBURI + "/authentify/view_handler?index=1&url=#{CGI::escape copy_last_rfqs_path(:customer_id => @customer.id, :parent_record_id => @customer.id, :parent_resource => 'customerx/customers')}", :class => BUTTONS_CLS['action']  if models.present? && @customer && has_action_right?('create', params[:controller], @customer) %>
+	    	<%= link_to t('New RFQ'), SUBURI + "/authentify/view_handler?index=1&url=#{CGI::escape new_rfq_path}", :class => BUTTONS_CLS['action']  if @customer.blank? && has_action_right?('create', params[:controller]) %>
+	    	<%#= link_to t('Copy Last RFQ'), SUBURI + "/authentify/view_handler?index=1&url=#{CGI::escape copy_last_rfqs_path(:customer_id => @customer.id, :parent_record_id => @customer.id, :parent_resource => 'customerx/customers')}", :class => BUTTONS_CLS['action']  if models.present? && @customer && has_action_right?('create', params[:controller], @customer) %>
 	    </th>
 	  </tr>
 	</table>

@@ -4,6 +4,7 @@ module JobshopRfqx
   class RfqsController < ApplicationController
     before_filter :require_employee
     before_filter :load_customer
+    helper_method :return_qty_for_quote
     
     def index
       @title = t('RFQs')
@@ -16,6 +17,7 @@ module JobshopRfqx
     def new
       @title = t('New RFQ')
       @rfq = JobshopRfqx::Rfq.new()
+      @rfq.quote_qties.build
       @dim_unit = [t('Metric'),t('Inch')]
       @erb_code = find_config_const('rfq_new_view', 'jobshop_rfqx')
     end
@@ -46,6 +48,7 @@ module JobshopRfqx
       if @rfq.update_attributes(params[:rfq], :as => :role_update)
         redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Updated!")
       else
+        @dim_unit = [t('Metric'),t('Inch')]
         flash[:notice] = t('Data Error. Not Updated!')
         render 'edit'
       end
@@ -67,6 +70,15 @@ module JobshopRfqx
     def load_customer
       @customer = JobshopRfqx.customer_class.find_by_id(params[:customer_id]) if params[:customer_id].present?
       @customer = JobshopRfqx.customer_class.find_by_id(JobshopRfqx::Rfq.find_by_id(params[:id]).customer_id) if params[:id].present?
+    end
+    
+    def return_qty_for_quote(r)
+      str = ''
+      JobshopRfqx::QuoteQty.where(:rfq_id => r.id).order('qty').each do |c|
+        str += ', ' + c.qty.to_s if str.present?
+        str += c.qty.to_s if str.blank?
+      end
+      str
     end
   end
 end

@@ -12,7 +12,7 @@ class CreateJobshopRfqxRfqs < ActiveRecord::Migration
       t.text :material_requirement
       t.integer :sales_id
       t.decimal :product_wt, :precision => 8, :scale => 2
-      t.string :qty_for_quote
+      #t.string :qty_for_quote
       t.string :dimension_unit
       t.date :est_production_date
       t.boolean :void, :default => false

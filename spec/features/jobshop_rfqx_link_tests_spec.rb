@@ -56,12 +56,18 @@ describe "LinkTests" do
     
     it "works! (now write some real specs)" do
       # Run the generator again with the --webrat flag if you want to use webrat methods/matchers
-      q = FactoryGirl.create(:jobshop_rfqx_rfq, :customer_id => @cust.id)
+      qty = FactoryGirl.create(:jobshop_rfqx_quote_qty)
+      qty1 = FactoryGirl.create(:jobshop_rfqx_quote_qty, :qty => 10)
+      q = FactoryGirl.create(:jobshop_rfqx_rfq, :customer_id => @cust.id, :quote_qties => [qty, qty1])
       visit rfqs_path
       #save_and_open_page
       page.should have_content('RFQs')
       click_link('Edit')
+      save_and_open_page
       page.should have_content('Edit RFQ')
+      visit rfqs_path
+      click_link('New RFQ')
+      save_and_open_page
       visit rfqs_path
       save_and_open_page
       click_link('Quotes')

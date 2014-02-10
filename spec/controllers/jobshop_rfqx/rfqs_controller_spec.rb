@@ -6,7 +6,6 @@ module JobshopRfqx
       controller.should_receive(:require_signin)
       controller.should_receive(:require_employee)
       @pagination_config = FactoryGirl.create(:engine_config, :engine_name => nil, :engine_version => nil, :argument_name => 'pagination', :argument_value => 30)
-      #engine_config = FactoryGirl.create(:engine_config, :engine_name => nil, :engine_version => nil, :argument_name => 'piece_unit', :argument_value => "t('set'), t('piece')")
     end
     
     before(:each) do
@@ -30,8 +29,9 @@ module JobshopRfqx
         :sql_code => "JobshopRfqx::Rfq.where(:void => false).order('created_at DESC')")
         session[:user_id] = @u.id
         session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
-        q = FactoryGirl.create(:jobshop_rfqx_rfq, :customer_id => @cust.id + 1)
-        q1 = FactoryGirl.create(:jobshop_rfqx_rfq, :drawing_num => 'new#', :customer_id => @cust.id)
+        qty = FactoryGirl.create(:jobshop_rfqx_quote_qty)
+        q = FactoryGirl.create(:jobshop_rfqx_rfq, :customer_id => @cust.id + 1, :quote_qties => [qty])
+        q1 = FactoryGirl.create(:jobshop_rfqx_rfq, :drawing_num => 'new#', :customer_id => @cust.id, :quote_qties => [qty])
         get 'index', {:use_route => :jobshop_rfqx}
         assigns(:rfqs).should =~ [q, q1]
       end

@@ -13,7 +13,7 @@ FactoryGirl.define do
     material_requirement "MyText"
     sales_id 1
     product_wt "9.99"
-    qty_for_quote "MyString"
+    #qty_for_quote "MyString"
     dimension_unit "MyString"
     est_production_date "2013-10-09"
     void false
