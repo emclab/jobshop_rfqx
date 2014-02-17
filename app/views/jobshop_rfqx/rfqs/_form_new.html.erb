@@ -17,7 +17,7 @@
     </p>  
   <% end %>     
   <p><%= link_to_add_fields t("Add Quote Qty"), f, :quote_qties %></p>
-  <%= f.input :material_requirement, :input_html => {:rows => 3} %>
+  <%= f.input :material_requirement, :label => 'Material Requirement', :input_html => {:rows => 3} %>
   <%= f.input :product_wt, :label => t("Product WT(g)") %> 
   <%= f.input :tech_spec, :label => t("Tech Spec"), :input_html => {:rows => 6} %> 
   <%= f.input :tech_note, :label => t("Tech Note"), :input_html => {:rows => 6} %> 

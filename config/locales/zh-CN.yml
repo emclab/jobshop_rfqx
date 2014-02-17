@@ -27,7 +27,7 @@ zh-CN:
   Completed : '已完成'
   Last Updated By : '更改'
   Request Date  : '申请日期'
-  Est Production Date  : '预计生产时间'
+  Est Production Date  : '预计生产日期'
   Finish Datetime : '完成时间'
   Review  : '总结'
   Delete  : '删除'
@@ -62,4 +62,5 @@ zh-CN:
   Qty : '数量'
   Quote Qty : '报价数量'
   Add Quote Qty : '填报价数量'
-  
+  Material Requirement : '材料要求'
+  Product WT(g) : '产品净重(g)'  
