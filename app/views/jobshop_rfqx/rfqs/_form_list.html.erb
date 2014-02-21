@@ -40,6 +40,7 @@
 			<td><%= t(prt(r, :void).to_s) %></td>
 			<td><%= prt(r, 'last_updated_by.name') %></td>    
 			<td><%= link_to t('Edit'), SUBURI + "/authentify/view_handler?index=1&url=#{edit_rfq_path(r)}", :class => BUTTONS_CLS['action']  if has_action_right?('update', params[:controller], r) %></td>
+			<td><%= link_to t('Quote Task'), SUBURI + "/authentify/view_handler?index=1&url=#{SUBURI + CGI::escape(eval(JobshopRfqx.quote_task_index_path.to_s))}", :class => BUTTONS_CLS['action']   %></td>
 			<td><%= link_to t('Orders'), SUBURI + "/authentify/view_handler?index=1&url=#{SUBURI + CGI::escape(eval(JobshopRfqx.order_index_path.to_s))}", :class => BUTTONS_CLS['action']   %></td>
 			<td><%= link_to t('Quotes'), SUBURI + "/authentify/view_handler?index=1&url=#{SUBURI + CGI::escape(eval(JobshopRfqx.quote_index_path.to_s))}", :class => BUTTONS_CLS['action']   %> </td>
 			<td><%= link_to t('Mfg Processes'), SUBURI + "/authentify/view_handler?index=1&url=#{SUBURI + CGI::escape(eval(JobshopRfqx.mfg_process_index_path.to_s))}", :class => BUTTONS_CLS['action']   %> </td>
