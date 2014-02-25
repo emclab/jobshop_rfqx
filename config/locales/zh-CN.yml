@@ -20,6 +20,8 @@ zh-CN:
   'No'  : '否'
   'yes' : '是'
   'no'  : '否'
+  'true' : '是'
+  'false'  : '否'
   'Duplicate Drawing Number!'  : '图号重复！'
   'Duplicate Name!'  : '名字重复！'
   Cancel  : '取消'
