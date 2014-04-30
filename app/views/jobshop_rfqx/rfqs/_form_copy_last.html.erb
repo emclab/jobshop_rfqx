@@ -18,6 +18,6 @@
   <%= f.input :sales_id, :collection => Authentify::UsersHelper::return_users('sales', params[:controller]), :label => t("Sales"),:label_method => :name, :value_method => :id, :include_blank => true %>
   
   <%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :class => BUTTONS_CLS['action'] %>
-  <%= f.button :submit, t('Save') %>  
+  <%= f.button :submit, t('Save'), :class => BUTTONS_CLS['action'] %>  
 <% end %>
 <% end %>

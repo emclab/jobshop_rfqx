@@ -32,7 +32,7 @@
   <%= f.input :sales_noupdate, :input_html => {:value => @rfq.sales.name}, :label => t("Sales"),:readonly => true if readonly?(@rfq, 'sales_id')%>
   
   <%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :class => BUTTONS_CLS['action'] %>
-  <%= f.button :submit, t('Save') %>  
+  <%= f.button :submit, t('Save'), :class => BUTTONS_CLS['action'] %>  
 <% end %>
 
 <% end %>
