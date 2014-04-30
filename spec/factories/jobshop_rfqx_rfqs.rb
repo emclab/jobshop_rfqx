@@ -6,7 +6,6 @@ FactoryGirl.define do
     drawing_num "MyString"
     tech_spec "MyText"
     tech_note "MyText"
-    wfid "MyString"
     last_updated_by_id 1
     customer_id 1
     tech_doc "MyText"

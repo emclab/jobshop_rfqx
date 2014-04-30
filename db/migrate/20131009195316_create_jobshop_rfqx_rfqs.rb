@@ -5,14 +5,13 @@ class CreateJobshopRfqxRfqs < ActiveRecord::Migration
       t.string :drawing_num
       t.text :tech_spec
       t.text :tech_note
-      t.string :wfid
+      t.string :wf_state
       t.integer :last_updated_by_id
       t.integer :customer_id
       t.text :tech_doc
       t.text :material_requirement
       t.integer :sales_id
       t.decimal :product_wt, :precision => 8, :scale => 2
-      #t.string :qty_for_quote
       t.string :dimension_unit
       t.date :est_production_date
       t.boolean :void, :default => false
@@ -24,6 +23,6 @@ class CreateJobshopRfqxRfqs < ActiveRecord::Migration
     add_index :jobshop_rfqx_rfqs, :drawing_num
     add_index :jobshop_rfqx_rfqs, :product_name
     add_index :jobshop_rfqx_rfqs, :sales_id
-    add_index :jobshop_rfqx_rfqs, :wfid
+    add_index :jobshop_rfqx_rfqs, :wf_state
   end
 end
