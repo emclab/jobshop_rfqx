@@ -30,6 +30,7 @@ module JobshopRfqx
       else
         @dim_unit = [t('Metric'),t('Inch')]
         @customer = JobshopRfqx.customer_class.find_by_id(params[:rfq][:customer_id]) if params[:rfq].present? && params[:rfq][:customer_id].present?
+        @erb_code = find_config_const('rfq_new_view', 'jobshop_rfqx')
         flash[:notice] = t('Data Error. Not Saved!')
         render 'new'
       end
@@ -49,6 +50,7 @@ module JobshopRfqx
         redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Updated!")
       else
         @dim_unit = [t('Metric'),t('Inch')]
+        @erb_code = find_config_const('rfq_edit_view', 'jobshop_rfqx')
         flash[:notice] = t('Data Error. Not Updated!')
         render 'edit'
       end
