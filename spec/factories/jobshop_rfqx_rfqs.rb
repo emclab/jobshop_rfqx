@@ -5,7 +5,7 @@ FactoryGirl.define do
     product_name "MyString"
     drawing_num "MyString"
     tech_spec "MyText"
-    tech_note "MyText"
+    note "MyText"
     last_updated_by_id 1
     customer_id 1
     tech_doc "MyText"
@@ -13,7 +13,7 @@ FactoryGirl.define do
     sales_id 1
     product_wt "9.99"
     #qty_for_quote "MyString"
-    dimension_unit "MyString"
+    dimension_unit "metric"
     est_production_date "2013-10-09"
     void false
   end

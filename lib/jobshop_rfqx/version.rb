@@ -1,3 +1,3 @@
 module JobshopRfqx
-  VERSION = "3.2.12.09"
+  VERSION = "01"
 end

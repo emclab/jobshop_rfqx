@@ -1,10 +1,11 @@
-require 'spec_helper'
+require 'rails_helper'
 
 module JobshopRfqx
-  describe RfqsController do
+  RSpec.describe RfqsController, type: :controller do
+    routes {JobshopRfqx::Engine.routes}
     before(:each) do
-      controller.should_receive(:require_signin)
-      controller.should_receive(:require_employee)
+      expect(controller).to receive(:require_signin)
+      expect(controller).to receive(:require_employee)
       @pagination_config = FactoryGirl.create(:engine_config, :engine_name => nil, :engine_version => nil, :argument_name => 'pagination', :argument_value => 30)
     end
     
@@ -18,7 +19,9 @@ module JobshopRfqx
       @u = FactoryGirl.create(:user, :user_levels => [ul], :user_roles => [ur])
       
       @cust = FactoryGirl.create(:kustomerx_customer) 
-      @q_task1 = FactoryGirl.create(:event_taskx_event_task, :name => 'quote && quote') 
+      #@q_task1 = FactoryGirl.create(:event_taskx_event_task, :name => 'quote && quote') 
+      
+      session[:user_role_ids] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id).user_role_ids
     end
     
     render_views
@@ -28,23 +31,21 @@ module JobshopRfqx
         user_access = FactoryGirl.create(:user_access, :action => 'index', :resource =>'jobshop_rfqx_rfqs', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "JobshopRfqx::Rfq.where(:void => false).order('created_at DESC')")
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         qty = FactoryGirl.create(:jobshop_rfqx_quote_qty)
         q = FactoryGirl.create(:jobshop_rfqx_rfq, :customer_id => @cust.id + 1, :quote_qties => [qty])
         q1 = FactoryGirl.create(:jobshop_rfqx_rfq, :drawing_num => 'new#', :customer_id => @cust.id, :quote_qties => [qty])
-        get 'index', {:use_route => :jobshop_rfqx}
-        assigns(:rfqs).should =~ [q, q1]
+        get 'index'
+        expect(assigns(:rfqs)).to match_array( [q, q1])
       end
       
       it "should only return rfqs which belongs to the customer" do
         user_access = FactoryGirl.create(:user_access, :action => 'index', :resource =>'jobshop_rfqx_rfqs', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "JobshopRfqx::Rfq.where(:void => false).order('created_at DESC')")
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         q = FactoryGirl.create(:jobshop_rfqx_rfq, :customer_id => @cust.id + 1)
         q1 = FactoryGirl.create(:jobshop_rfqx_rfq, :customer_id => @cust.id)
-        get 'index', {:use_route => :jobshop_rfqx, :customer_id => @cust.id}
-        assigns(:rfqs).should =~ [q1]
+        get 'index', { :customer_id => @cust.id}
+        expect(assigns(:rfqs)).to match_array( [q1])
       end
     end
   
@@ -53,9 +54,8 @@ module JobshopRfqx
         user_access = FactoryGirl.create(:user_access, :action => 'create', :resource =>'jobshop_rfqx_rfqs', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
-        get 'new', {:use_route => :jobshop_rfqx, :customer_id => @cust.id}
-        response.should be_success
+        get 'new', { :customer_id => @cust.id}
+        expect(response).to be_success
       end
     end
   
@@ -64,20 +64,18 @@ module JobshopRfqx
         user_access = FactoryGirl.create(:user_access, :action => 'create', :resource =>'jobshop_rfqx_rfqs', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         q = FactoryGirl.attributes_for(:jobshop_rfqx_rfq, :customer_id => @cust.id)
-        get 'create', {:use_route => :jobshop_rfqx, :customer_id => @cust.id, :rfq => q}
-        response.should redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Saved!")
+        get 'create', { :customer_id => @cust.id, :rfq => q}
+        expect(response).to redirect_to URI.escape(SUBURI + "/view_handler?index=0&msg=Successfully Saved!")
       end
       
       it "should render new with data error" do
         user_access = FactoryGirl.create(:user_access, :action => 'create', :resource =>'jobshop_rfqx_rfqs', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         q = FactoryGirl.attributes_for(:jobshop_rfqx_rfq, :customer_id => @cust.id, :product_name => nil)
-        get 'create', {:use_route => :jobshop_rfqx, :customer_id => @cust.id, :rfq => q}
-        response.should render_template('new')
+        get 'create', { :customer_id => @cust.id, :rfq => q}
+        expect(response).to render_template('new')
       end
     end
   
@@ -86,10 +84,9 @@ module JobshopRfqx
         user_access = FactoryGirl.create(:user_access, :action => 'update', :resource =>'jobshop_rfqx_rfqs', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         q = FactoryGirl.create(:jobshop_rfqx_rfq, :customer_id => @cust.id)
-        get 'edit', {:use_route => :jobshop_rfqx, :id => q.id}
-        response.should be_success
+        get 'edit', { :id => q.id}
+        expect(response).to be_success
       end
     end
   
@@ -98,20 +95,18 @@ module JobshopRfqx
         user_access = FactoryGirl.create(:user_access, :action => 'update', :resource =>'jobshop_rfqx_rfqs', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         q = FactoryGirl.create(:jobshop_rfqx_rfq, :customer_id => @cust.id)
-        get 'update', {:use_route => :jobshop_rfqx, :id => q.id, :rfq => {:material_requirement => 'steel 201'}}
-        response.should redirect_to URI.escape(SUBURI + "/authentify/view_handler?index=0&msg=Successfully Updated!")
+        get 'update', { :id => q.id, :rfq => {:material_requirement => 'steel 201'}}
+        expect(response).to redirect_to URI.escape(SUBURI + "/view_handler?index=0&msg=Successfully Updated!")
       end
       
       it "should render edit with data error" do
         user_access = FactoryGirl.create(:user_access, :action => 'update', :resource =>'jobshop_rfqx_rfqs', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         q = FactoryGirl.create(:jobshop_rfqx_rfq, :customer_id => @cust.id)
-        get 'update', {:use_route => :jobshop_rfqx, :id => q.id, :rfq => {:drawing_num => ''}}
-        response.should render_template('edit')
+        get 'update', { :id => q.id, :rfq => {:product_name => ''}}
+        expect(response).to render_template('edit')
       end
     end
   
@@ -120,22 +115,9 @@ module JobshopRfqx
         user_access = FactoryGirl.create(:user_access, :action => 'show', :resource =>'jobshop_rfqx_rfqs', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "record.sales_id == session[:user_id]")
         session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
         q = FactoryGirl.create(:jobshop_rfqx_rfq, :customer_id => @cust.id, :sales_id => @u.id)
-        get 'show', {:use_route => :jobshop_rfqx, :id => q.id }
-        response.should be_success
-      end
-    end
-  
-    describe "GET 'copy_last'" do
-      it "should display the copy last page" do
-        user_access = FactoryGirl.create(:user_access, :action => 'copy_last', :resource =>'jobshop_rfqx_rfqs', :role_definition_id => @role.id, :rank => 1,
-        :sql_code => "")
-        session[:user_id] = @u.id
-        session[:user_privilege] = Authentify::UserPrivilegeHelper::UserPrivilege.new(@u.id)
-        q = FactoryGirl.create(:jobshop_rfqx_rfq, :customer_id => @cust.id, :sales_id => @u.id)
-        get 'copy_last', {:use_route => :jobshop_rfqx, :customer_id => @cust.id}
-        response.should be_success
+        get 'show', { :id => q.id }
+        expect(response).to be_success
       end
     end
   

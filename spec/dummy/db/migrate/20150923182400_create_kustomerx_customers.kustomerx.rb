@@ -21,8 +21,8 @@ class CreateKustomerxCustomers < ActiveRecord::Migration
       t.text :customer_specific
       t.text :note
       t.string :web
-
       t.timestamps
+      t.integer :customer_industry_id
     end
     
     add_index :kustomerx_customers, :name
@@ -30,5 +30,8 @@ class CreateKustomerxCustomers < ActiveRecord::Migration
     add_index :kustomerx_customers, :sales_id
     add_index :kustomerx_customers, :zone_id
     add_index :kustomerx_customers, :active
+    add_index :kustomerx_customers, :customer_industry_id
+    add_index :kustomerx_customers, :customer_status_category_id
+    add_index :kustomerx_customers, :phone
   end
 end

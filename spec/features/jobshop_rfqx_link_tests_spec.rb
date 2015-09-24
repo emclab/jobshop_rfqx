@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-describe "LinkTests" do
+RSpec.describe "LinkTests", type: :request do
   describe "GET /jobshop_rfqx_link_tests" do
     mini_btn = 'btn btn-mini '
     ActionView::CompiledTemplates::BUTTONS_CLS =
@@ -19,7 +19,11 @@ describe "LinkTests" do
          'inverse'      => 'btn btn-inverse',
          'mini-inverse' => mini_btn + 'btn btn-inverse',
          'link'         => 'btn btn-link',
-         'mini-link'    => mini_btn +  'btn btn-link'
+         'mini-link'    => mini_btn +  'btn btn-link',
+         'right-span#'         => '2', 
+               'left-span#'         => '6', 
+               'offset#'         => '2',
+               'form-span#'         => '4'
         }
     before(:each) do
       @pagination_config = FactoryGirl.create(:engine_config, :engine_name => nil, :engine_version => nil, :argument_name => 'pagination', :argument_value => 30)
@@ -36,9 +40,9 @@ describe "LinkTests" do
       ua1 = FactoryGirl.create(:user_access, :action => 'create', :resource => 'jobshop_rfqx_rfqs', :role_definition_id => @role.id, :rank => 1,
            :sql_code => "")
       ua1 = FactoryGirl.create(:user_access, :action => 'update', :resource => 'jobshop_rfqx_rfqs', :role_definition_id => @role.id, :rank => 1,
-           :sql_code => "record.sales_id == session[:user_id]")
+           :sql_code => "")
       user_access = FactoryGirl.create(:user_access, :action => 'show', :resource =>'jobshop_rfqx_rfqs', :role_definition_id => @role.id, :rank => 1,
-        :sql_code => "record.sales_id == session[:user_id]")
+        :sql_code => "")
       user_access = FactoryGirl.create(:user_access, :action => 'create_rfq', :resource => 'commonx_logs', :role_definition_id => @role.id, :rank => 1,
         :sql_code => "")
       ua1 = FactoryGirl.create(:user_access, :action => 'index', :resource => 'jobshop_quotex_quotes', :role_definition_id => @role.id, :rank => 1,
@@ -50,7 +54,7 @@ describe "LinkTests" do
       visit '/'
       #save_and_open_page
       fill_in "login", :with => @u.login
-      fill_in "password", :with => 'password'
+      fill_in "password", :with => @u.password
       click_button 'Login'
     end
     
@@ -59,19 +63,48 @@ describe "LinkTests" do
       qty = FactoryGirl.create(:jobshop_rfqx_quote_qty)
       qty1 = FactoryGirl.create(:jobshop_rfqx_quote_qty, :qty => 10)
       q = FactoryGirl.create(:jobshop_rfqx_rfq, :customer_id => @cust.id, :quote_qties => [qty, qty1])
-      visit rfqs_path
+
+      visit jobshop_rfqx.rfqs_path
       #save_and_open_page
-      page.should have_content('RFQs')
+      expect(page).to have_content('RFQs')
       click_link('Edit')
-      save_and_open_page
-      page.should have_content('Edit RFQ')
-      visit rfqs_path
-      click_link('New RFQ')
-      save_and_open_page
-      visit rfqs_path
-      save_and_open_page
-      click_link('Quotes')
-      save_and_open_page
+      fill_in 'rfq_drawing_num', with: 'a new drawing#'
+      click_button 'Save'
+      visit jobshop_rfqx.rfqs_path
+      #save_and_open_page
+      expect(page).to have_content('a new drawing#')
+      
+      #bad data
+      click_link('Edit')
+      fill_in 'rfq_product_name', with: ''
+      fill_in 'rfq_drawing_num', with: 'a bad num'
+      click_button 'Save'
+      visit jobshop_rfqx.rfqs_path
+      expect(page).not_to have_content('a bad num')
+      #save_and_open_page
+      visit jobshop_rfqx.rfqs_path()
+      click_link('New Rfq')
+      expect(page).to have_content('New RFQ')
+     
+      visit jobshop_rfqx.new_rfq_path(customer_id: @cust.id)
+      fill_in 'rfq_product_name', with: 'a good name'
+      fill_in 'rfq_quote_qties_attributes_0_qty', with: 10
+      click_button 'Save'
+      visit jobshop_rfqx.rfqs_path
+      expect(page).to have_content('a good name')
+      #save_and_open_page
+      visit jobshop_rfqx.rfqs_path
+      visit jobshop_rfqx.new_rfq_path(customer_id: @cust.id)
+      fill_in 'rfq_product_name', with: ''
+      fill_in 'rfq_drawing_num', with: 'a bad name'
+      fill_in 'rfq_quote_qties_attributes_0_qty', with: 10
+      click_button 'Save'
+      visit jobshop_rfqx.rfqs_path
+      expect(page).not_to have_content('a bad name')
+
+      #save_and_open_page
+      #bad data
+      #save_and_open_page
     end
   end
 end

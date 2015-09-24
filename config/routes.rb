@@ -5,7 +5,6 @@ JobshopRfqx::Engine.routes.draw do
       get :search_results
       get :stats
       get :stats_results
-      get :copy_last
     end
   end
 

@@ -1,10 +1,10 @@
-require 'spec_helper'
+require 'rails_helper'
 
 module JobshopRfqx
-  describe QuoteQty do
+  RSpec.describe QuoteQty, type: :model do
     it "should reject nil qty" do
       c = FactoryGirl.build(:jobshop_rfqx_quote_qty, :qty => nil)
-      c.should_not be_valid
+      expect(c).not_to be_valid
     end
     
   end

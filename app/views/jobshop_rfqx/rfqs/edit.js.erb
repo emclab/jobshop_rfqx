@@ -1,0 +1,16 @@
+<% if @view_in_config && @js_erb_code %>
+  <%= render inline: ERB.new(@js_erb_code).result(binding) %>
+  
+<% else %>
+<% if params[:rfq][:field_changed] == 'customer_name' && params[:rfq][:customer_name_autocomplete].present?  %>
+  <% customer = JobshopRfqx.customer_class.where('name = ?', params[:rfq][:customer_name_autocomplete].strip).first %>
+  $('#rfq_customer_id').empty();
+  $('#rfq_customer_id').val("<%=customer.id%>");
+  $('#rfq_field_changed').val('');
+<% elsif params[:rfq][:field_changed] == 'customer_name' %>
+  $('#rfq_customer_id').empty();
+  $('#rfq_field_changed').val('');
+<% end %>
+
+
+<% end %>

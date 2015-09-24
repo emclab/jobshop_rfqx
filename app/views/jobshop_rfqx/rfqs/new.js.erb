@@ -1,0 +1,28 @@
+<% if @view_in_config && @js_erb_code %>
+  <%= render inline: ERB.new(@js_erb_code).result(binding) %>
+  
+<% else %>
+<% if params[:rfq][:field_changed] == 'customer_name' && params[:rfq][:customer_name_autocomplete].present?  %>
+  <% customer = JobshopRfqx.customer_class.where('name = ?', params[:rfq][:customer_name_autocomplete].strip).first %>
+  $('#rfq_customer_id').empty();
+  $('#rfq_customer_id').val("<%=customer.id%>");
+  $('#rfq_field_changed').val('');
+<% elsif params[:rfq][:field_changed] == 'customer_name' %>
+  $('#rfq_customer_id').empty();
+  $('#rfq_field_changed').val('');
+<% end %>
+
+<% if params[:rfq][:field_changed] == 'copy_rfq' && params[:rfq][:copy_rfq_id].present?  %>
+  <% rfq = JobshopRfqx::Rfq.find_by_id(params[:rfq][:copy_rfq_id].to_i)%>
+  <% if rfq %>
+    $('#rfq_product_name').val("<%=rfq.product_name %>");
+    $('#rfq_drawing_num').val("<%=rfq.drawing_num %>");
+    $('#rfq_tech_spec').val("<%=rfq.tech_spec %>");
+    $('#rfq_material_requirement').val("<%=rfq.material_requirement %>");
+    $('#rfq_dimension_unit').val("<%=rfq.dimension_unit %>");
+    $('#rfq_aux_resource').val("<%=rfq.aux_resource %>");
+    $('#rfq_field_changed').val('');
+  <% end %>
+<% end %>
+
+<% end %>

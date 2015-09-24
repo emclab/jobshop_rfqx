@@ -3,7 +3,14 @@
   
 <% else %>
 <div class="pagination"><%= will_paginate models %></div>
-    <table class="table table-striped">
+<div class="container-fluid">
+      <div class="page-header clearfix">
+          <div class="pull-left">
+            <h2><%=@title%></h2>
+          </div>
+      </div>
+      <table class="table table-hover">
+        <thead>
 		<tr>
 			<th><%= t('RFQ#') %></th>
 			<th><%= t('RFQ Date') %></th>
@@ -11,9 +18,6 @@
 			<th><%= t('Product Name') %></th>
 			<th><%= t('Drawing#') %></th>
 			<th><%= t('Qty For Quote') %></th>	
-			<th><%= t('Num of Quote') %></th>
-			<th><%= t('Last Quote Date') %></th>		
-			<th><%= t('Num of Order') %></th>
 			<th><%= t('Void') %></th>
 			<th><%= t('Last Updated By') %></th>
 			<th></th>
@@ -21,41 +25,33 @@
 			<th></th>
 			<th></th>
 		</tr>
+		   </thead>
+      <tbody>
 		<% models.each do |r| %>
 		  <tr>
 		  	<% unless has_action_right?('show', params[:controller], r) %>
 		  	  <td><%= prt(r, :id) %></td>
 		  	<% else %>
-		  	  <td><%= link_to r.id.to_s, SUBURI + "/authentify/view_handler?index=1&url=#{rfq_path(r)}" %></td>
+		  	  <td><%= link_to r.id.to_s, SUBURI + "/view_handler?index=1&url=#{rfq_path(r)}" %></td>
 		  	<% end %>
 		  	<td><%= r.created_at.strftime("%Y/%m/%d") %></td>
 		  	<td><%= prt(r, 'customer.short_name') %></td>
 			<td><%= prt(r, :product_name) %></td>
 			<td><%= prt(r, :drawing_num) %></td>
 			<td><%= return_qty_for_quote(r) %></td> 
-			<% quotes = JobshopQuotex::Quote.where(:rfq_id => r.id, :void => false).order('created_at') %>
-			<td><%= quotes.size %></td>
-			<td><%= quotes.last.created_at.strftime("%Y/%m/%d") if quotes.present? %></td>
-			<td><%= JobshopRfqx.order_index_path.size %></td>
 			<td><%= t(prt(r, :void).to_s) %></td>
-			<td><%= prt(r, 'last_updated_by.name') %></td>    
-			<td><%= link_to t('Edit'), SUBURI + "/authentify/view_handler?index=1&url=#{edit_rfq_path(r)}", :class => BUTTONS_CLS['action']  if has_action_right?('update', params[:controller], r) %></td>
-			<td><%= link_to t('Quote Tasks'), SUBURI + "/authentify/view_handler?index=1&url=#{SUBURI + CGI::escape(eval(JobshopRfqx.quote_task_index_path.to_s))}", :class => BUTTONS_CLS['action']   %></td>
-			<td><%= link_to t('Orders'), SUBURI + "/authentify/view_handler?index=1&url=#{SUBURI + CGI::escape(eval(JobshopRfqx.order_index_path.to_s))}", :class => BUTTONS_CLS['action']   %></td>
-			<td><%= link_to t('Quotes'), SUBURI + "/authentify/view_handler?index=1&url=#{SUBURI + CGI::escape(eval(JobshopRfqx.quote_index_path.to_s))}", :class => BUTTONS_CLS['action']   %> </td>
-			<td><%= link_to t('Mfg Processes'), SUBURI + "/authentify/view_handler?index=1&url=#{SUBURI + CGI::escape(eval(JobshopRfqx.mfg_process_index_path.to_s))}", :class => BUTTONS_CLS['action']   %> </td>
+			<td><%= prt(r, 'last_updated_by.name') if r.last_updated_by_id.present? %></td>    
+			<td><%= link_to t('Edit'), SUBURI + "/view_handler?index=1&url=#{edit_rfq_path(r)}", :class => BUTTONS_CLS['action']  if has_action_right?('update', params[:controller], r) %></td>
 		  </tr>
 		<% end %>
+	  </tbody>
 	</table>
 	
-	<table class="table table-striped">
-	  <tr>
-	    <th>
-	    	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	    	<%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :class => BUTTONS_CLS['action']  %>
-	    	<%= link_to t('New RFQ'), SUBURI + "/authentify/view_handler?index=1&url=#{CGI::escape new_rfq_path(:customer_id => @customer.id, :parent_record_id => @customer.id, :parent_resource => JobshopRfqx.customer_class.to_s.underscore.pluralize)}", :class => BUTTONS_CLS['action']  if @customer && has_action_right?('create', params[:controller], @customer) %>
-	    	<%= link_to t('New RFQ'), SUBURI + "/authentify/view_handler?index=1&url=#{CGI::escape new_rfq_path}", :class => BUTTONS_CLS['action']  if @customer.blank? && has_action_right?('create', params[:controller]) %>
-	    	<%#= link_to t('Copy Last RFQ'), SUBURI + "/authentify/view_handler?index=1&url=#{CGI::escape copy_last_rfqs_path(:customer_id => @customer.id, :parent_record_id => @customer.id, :parent_resource => 'customerx/customers')}", :class => BUTTONS_CLS['action']  if models.present? && @customer && has_action_right?('create', params[:controller], @customer) %>
+	<div class="btn-toolbar">
+	    	<%= link_to t('Back'), SUBURI + "/view_handler?index=0", :class => BUTTONS_CLS['action']  %>
+	    	<%= link_to t('New RFQ'), SUBURI + "/view_handler?index=1&url=#{CGI::escape new_rfq_path(:customer_id => @customer.id, :parent_record_id => @customer.id, :parent_resource => JobshopRfqx.customer_class.to_s.underscore.pluralize)}", :class => BUTTONS_CLS['action']  if @customer && has_action_right?('create', params[:controller], @customer) %>
+	    	<%= link_to t('New RFQ'), SUBURI + "/view_handler?index=1&url=#{CGI::escape new_rfq_path}", :class => BUTTONS_CLS['action']  if @customer.blank? && has_action_right?('create', params[:controller]) %>
+	    	<%#= link_to t('Copy Last RFQ'), SUBURI + "/view_handler?index=1&url=#{CGI::escape copy_last_rfqs_path(:customer_id => @customer.id, :parent_record_id => @customer.id, :parent_resource => 'customerx/customers')}", :class => BUTTONS_CLS['action']  if models.present? && @customer && has_action_right?('create', params[:controller], @customer) %>
 	    </th>
 	  </tr>
 	</table>

@@ -2,16 +2,31 @@
   <%= render inline: @erb_code %>
   
 <% else %>
-<%= simple_form_for @rfq do |f| %>    
+<div class="container">
+  <div class="page-header clearfix">
+    <div class="pull-left">
+    <h2><%=@title%></h2>
+    </div>
+  </div>
+<%= simple_form_for @rfq , html: { class: 'form-horizontal col-sm-' + BUTTONS_CLS['form-span#'] },
+    wrapper: :horizontal_form,
+    wrapper_mappings: {
+    check_boxes: :horizontal_radio_and_checkboxes,
+    radio_buttons: :horizontal_radio_and_checkboxes,
+    file: :horizontal_file_input,
+    boolean: :horizontal_boolean
+  } do |f| %>
+  
+  <div class="form-inputs">     
 
-  <%= f.input :customer_name_autocomplete, :input_html => { data: {autocomplete_source: kustomerx.autocomplete_customers_path}}, :label => t("Customer"), :required => true %>  
-  <%#= f.input :customer_name, :label => t('Customer'), :readonly => true, :input_html => {:value => @customer.name} %>
+  <%= f.input :customer_name, :input_html => { data: {autocomplete_source: kustomerx.autocomplete_customers_path}, value: @customer.name}, :label => t("Customer") %>  
+  <%= f.input :customer_id, :input_html => {:value => @rfq.customer_id}, as: :hidden %>
   <%= f.input :product_name, :label => t("Product Name"), :readonly => readonly?(@rfq, 'product_name')  %>  
   <%= f.input :drawing_num, :label => t("Drawing#"), :readonly => readonly?(@rfq, 'drawing_num') %> 
   <%= f.input :dimension_unit, :label => t("Dimension Unit"), :collection => @dim_unit unless readonly?(@rfq, 'dimension_unit') %> 
   <%= f.input :dimension_unit, :label => t("Dimension Unit"), :readonly => true, :input_html => {:value => @rfq.dimension_unit} if readonly?(@rfq, 'dimension_unit') %>
   <%=t('Qty For Quote')%>:
-  <%= f.fields_for :quote_qties, @rfq.quote_qties.first do |builder| %>
+  <%= f.simple_fields_for :quote_qties, @rfq.quote_qties.first do |builder| %>
     <p>
       <%= render('first_quote_qty', :f => builder)%>
     </p>  
@@ -19,9 +34,8 @@
   <p><%= link_to_add_fields t("Add Quote Qty"), f, :quote_qties %></p>
   <%= f.input :material_requirement, :input_html => {:rows => 3}, :readonly => readonly?(@rfq, 'material_requirement') %>
   <%= f.input :product_wt, :label => t("Product WT(g)"), :readonly => readonly?(@rfq, 'product_wt') %> 
-  <%= f.input :tech_spec, :label => t("Tech Spec"), :input_html => {:rows => 6}, :readonly => readonly?(@rfq, 'tech_spec') %> 
-  <%= f.input :tech_note, :label => t("Tech Note"), :input_html => {:rows => 6}, :readonly => readonly?(@rfq, 'tech_note') %> 
-  <%= f.input :tech_doc, :label => t("Tech Doc"), :input_html => {:rows => 6}, :readonly => readonly?(@rfq, 'tech_doc') %> 
+  <%= f.input :tech_spec, :label => t("Tech Spec"), :input_html => {:rows => 3}, :readonly => readonly?(@rfq, 'tech_spec') %> 
+  <%= f.input :tech_doc, :label => t("Tech Doc"), :input_html => {:rows => 3}, :readonly => readonly?(@rfq, 'tech_doc') %> 
   <%= f.input :est_production_date, :label => t("Est Production Date"), :as => :string , :readonly => readonly?(@rfq, 'est_production_date')%>
   <% if readonly?(@rfq, 'void')%>
         <%= f.input :void_noupdate, :label => t('Void'), :readonly => true, :required => false, :input_html => {:value => (@rfq.void ? t('Yes') : t('No'))} %>
@@ -30,9 +44,18 @@
   <% end %>
   <%= f.input :sales_id, :collection => Authentify::UsersHelper::return_users('sales', params[:controller]), :label => t("Sales"),:label_method => :name, :value_method => :id, :include_blank => true unless readonly?(@rfq, 'sales_id')%>
   <%= f.input :sales_noupdate, :input_html => {:value => @rfq.sales.name}, :label => t("Sales"),:readonly => true if readonly?(@rfq, 'sales_id')%>
+  <%= f.input :note, :label => t("Note"), :input_html => {:rows => 3} %> 
+  <%= f.input :field_changed, :as => :hidden %>
   
-  <%= link_to t('Back'), SUBURI + "/authentify/view_handler?index=0", :class => BUTTONS_CLS['action'] %>
-  <%= f.button :submit, t('Save'), :class => BUTTONS_CLS['action'] %>  
-<% end %>
+  <div class="form-actions col-sm-offset-<%=BUTTONS_CLS['offset#']%>" >
+          <%= link_to t('Back'), SUBURI + "/view_handler?index=0", :class => BUTTONS_CLS['action'] %>
+          <%= f.button :submit, t('Save'), :class => BUTTONS_CLS['action'] %>    
+  </div> 
+
+  </div>
+ 
+  <% end %>
+
+</div>
 
 <% end %>
