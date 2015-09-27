@@ -17,6 +17,7 @@ class CreateJobshopRfqxRfqs < ActiveRecord::Migration
       t.boolean :void, :default => false
       t.string :aux_resource
       t.integer :category_id
+      t.text :tech_note
 
       t.timestamps
     end
