@@ -3,6 +3,7 @@ class CreateJobshopRfqxRfqs < ActiveRecord::Migration
     create_table :jobshop_rfqx_rfqs do |t|
       t.string :product_name
       t.string :drawing_num
+      t.string :part_num
       t.text :tech_spec
       t.text :note
       t.string :wf_state
@@ -29,5 +30,6 @@ class CreateJobshopRfqxRfqs < ActiveRecord::Migration
     add_index :jobshop_rfqx_rfqs, :wf_state
     add_index :jobshop_rfqx_rfqs, :aux_resource
     add_index :jobshop_rfqx_rfqs, :category_id
+    add_index :jobshop_rfqx_rfqs, :part_num
   end
 end

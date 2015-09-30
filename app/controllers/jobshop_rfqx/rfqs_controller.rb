@@ -119,12 +119,14 @@ module JobshopRfqx
     private
     def new_params
       params.require(:rfq).permit(:customer_id, :dimension_unit, :drawing_num, :est_production_date, :last_updated_by_id, :material_requirement, :product_name, 
-                    :product_wt, :sales_id, :tech_doc, :note, :tech_spec, :void, :wf_state, :category_id, :tech_note, quote_qties_attributes: [:id, :_destroy, :qty, :unit])
+                    :product_wt, :sales_id, :tech_doc, :note, :tech_spec, :void, :wf_state, :category_id, :tech_note, :part_num, 
+                    quote_qties_attributes: [:id, :_destroy, :qty, :unit])
     end
     
     def edit_params
       params.require(:rfq).permit(:customer_id, :dimension_unit, :drawing_num, :est_production_date, :last_updated_by_id, :material_requirement, :product_name, 
-                    :product_wt, :sales_id, :tech_doc, :note, :tech_spec, :void, :wf_state, :category_id, :tech_note, quote_qties_attributes: [:id, :_destroy, :qty, :unit])
+                    :product_wt, :sales_id, :tech_doc, :note, :tech_spec, :void, :wf_state, :category_id, :tech_note, :part_num, 
+                    quote_qties_attributes: [:id, :_destroy, :qty, :unit])
     end
   end
 end
